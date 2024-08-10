@@ -4,6 +4,7 @@ import {mutation, query} from "./_generated/server"
 export const createFile = mutation({
     args:{
         name: v.string(),
+        orgId: v.string()
     },
     async handler(ctx, args){
 
@@ -15,13 +16,16 @@ export const createFile = mutation({
 
         await ctx.db.insert("file", {
             name: args.name,
+            orgId: args.orgId
 
         })
     }
 })
 
 export const getFiles = query({
-    args: {},
+    args: {
+        orgId: v.string(),
+    },
     async handler(ctx, args){
 
         const identity = await ctx.auth.getUserIdentity();
@@ -29,6 +33,9 @@ export const getFiles = query({
             return []
          }
 
-        return ctx.db.query("file").collect()
+        return ctx.db
+            .query("file")
+            .withIndex('by_orgId', q=> q.eq("orgId", args.orgId))
+            .collect()
     }
 })
