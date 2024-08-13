@@ -23,13 +23,14 @@ export default function Home() {
   );
   const createFile= useMutation(api.files.createFile);
 
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <SignedIn>
         <SignOutButton><Button>Sign Out</Button></SignOutButton>
       </SignedIn>
       <SignedOut>
-       <SignInButton mode="modal"><Button>Sign In</Button></SignInButton>
+        <SignInButton mode="modal"><Button>Sign In</Button></SignInButton>
       </SignedOut>
 
       {
@@ -45,13 +46,19 @@ export default function Home() {
       <Button onClick={()=>{ 
         if (!orgId) return
         createFile({
-          name: "New File",
+          name: 'New File' ,
           orgId,
         })
         }
       }>
         Create File
       </Button>
+      {/* <Button onClick={()=>{ 
+        console.log(identity)
+        }
+      }>
+        Create File
+      </Button> */}
     </main>
   );
 }

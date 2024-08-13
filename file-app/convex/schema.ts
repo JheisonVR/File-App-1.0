@@ -8,7 +8,8 @@ export default defineSchema({
   ),
   users: defineTable({
     tokenIdentifier: v.string(),
-    name: v.string(),
-    image: v.optional(v.string()),
-  }),
+    orgIds: v.array(v.string()),
+    // name: v.string(),
+    // image: v.optional(v.string()),
+  }).index("by_tokenIdentifier", ["tokenIdentifier"]),
   });
