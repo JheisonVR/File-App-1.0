@@ -1,8 +1,9 @@
 'use client';
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SignedIn, SignedOut, SignInButton, SignOutButton, useOrganization, useSession, useUser } from "@clerk/nextjs";
 import { useMutation, useQuery } from "convex/react";
-import Image from "next/image";
 import { api } from "../../convex/_generated/api";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
@@ -19,10 +20,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+
 import { Input } from "@/components/ui/input"
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/hooks/use-toast"
 import { Loader2 } from "lucide-react";
+import FileCard from "./file-card";
 
 const formSchema = z.object({
   title: z.string().min(1).max(200),
@@ -108,19 +110,10 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <SignedIn>
-        <SignOutButton><Button>Sign Out</Button></SignOutButton>
-      </SignedIn>
-      <SignedOut>
-        <SignInButton mode="modal"><Button>Sign In</Button></SignInButton>
-      </SignedOut>
-
       {
         files?.map(file => {
           return (
-            <div key={file._id}>
-              <p className="font-light">{file.name}</p> 
-            </div>
+            <FileCard key={file._id} file={file} />
           )
         })
       }
@@ -129,7 +122,11 @@ export default function Home() {
         setIsFileDialogOpen(isOpen);
         form.reset();
       } }>
-        <DialogTrigger>Dialog</DialogTrigger>
+        <DialogTrigger>
+          <Button>
+            Upload File
+          </Button>
+        </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Upload your file</DialogTitle>
@@ -189,13 +186,6 @@ export default function Home() {
       </Dialog>
 
 
-      <Button onClick={()=>{ 
-
-        
-        }
-      }>
-        Create File
-      </Button>
       {/* <Button onClick={()=>{ 
         console.log(identity)
         }
